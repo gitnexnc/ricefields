@@ -158,7 +158,6 @@
 
   programs.fish.enable = true;
   programs.gnome-disks.enable = true;
-  programs.kdeconnect.enable = true;
   services.gvfs.enable = true;
   services.udisks2.enable = true;
   services.devmon.enable = true;
@@ -246,8 +245,17 @@
   virtualisation.spiceUSBRedirection.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall = { 
+  enable = true;
+  
+  # Specific Port:
+    allowedTCPPorts = [ ];
+    allowedUDPPorts = [ ];
+
+  # Port Ranges:
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+  };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 

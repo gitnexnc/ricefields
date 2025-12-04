@@ -55,6 +55,7 @@
     exiftool
     nsxiv
     qbittorrent
+    valent
 
     # Terminal
     tmux

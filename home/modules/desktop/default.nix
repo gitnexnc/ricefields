@@ -13,5 +13,6 @@
     ./waybar.nix
     ./wofi.nix
     ./swaync.nix
+    ./theme.nix
   ];
 }
