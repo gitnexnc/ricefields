@@ -8,6 +8,7 @@
   ];
 
   imports = [
+    ./hyprland/hyprland.nix
     ./hyprland/hyprlock.nix
     ./hyprland/hyprpaper.nix
     ./waybar.nix
