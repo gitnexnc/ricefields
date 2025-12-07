@@ -90,6 +90,7 @@
     # Firewall configuration
     firewall = {
       enable = true;
+      trustedInterfaces = ["virbr0"];
       allowedTCPPortRanges = [ 
         { from = 1714; to = 1764; }  # KDE Connect / Valent
       ];
