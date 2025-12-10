@@ -358,7 +358,7 @@
   # ═══════════════════════════════════════════════════════════════════════════
 
   system.autoUpgrade = {
-    enable = true;
+    enable = false;
     allowReboot = false;
   };
 
