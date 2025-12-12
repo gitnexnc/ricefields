@@ -34,25 +34,37 @@
     # ═══════════════════════════════════════════════════════════════════════════
     #  SYSTEM CONFIGURATION
     # ═══════════════════════════════════════════════════════════════════════════
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations = {
       
-      # Target System Architecture
-      system = "x86_64-linux";
-      
-      # Pass inputs to modules
-      specialArgs = { inherit inputs; };
-      
-      modules = [
-        # Hardware Import
-        ./hardware-configuration.nix
+      # Desktop Configuration
+      "desktop" = nixpkgs.lib.nixosSystem {
+	# Target System Architecture
+	system = "x86_64-linux";
+	# Pass inputs to modules
+	specialArgs = { inherit inputs; };
+	modules = [
+          # Hardware Import
+          ./hosts/desktop/hardware-configuration.nix
+          # Main Configuration 
+          ./hosts/desktop/configuration.nix
+          # Home Manager Module
+          inputs.home-manager.nixosModules.home-manager
+        ];
+      };
 
-        # Main Configuration 
-        ./configuration.nix
-        
-        # Home Manager Module
-        inputs.home-manager.nixosModules.home-manager
-      ];
-    };
+      # VM Configuration
+      "vm" = nixpkgs.lib.nixosSystem {
+	# Target System Architecture
+	system = "x86_64-linux";
+	specialArgs = {inherit inputs;};
+	modules = [
+	  # Main Configuration
+	  ./hosts/vm/configuration.nix
+	  # Home Manager Module
+	  inputs.home-manager.nixosModules.home-manager
+	];
+      };
+   };
     
     # ═══════════════════════════════════════════════════════════════════════════
     #  UTILITIES
