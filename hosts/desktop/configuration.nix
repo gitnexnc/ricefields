@@ -30,11 +30,11 @@
       efi.canTouchEfiVariables = true;
       timeout = 3;  # Boot menu timeout in seconds
     };
-    kernelPackages = pkgs.linuxPackages_zen;  # Performance-optimized kernel
+    kernelPackages = pkgs.linuxPackages_zen; # Performance-optimized kernel
     
     # Silent boot (optional - uncomment if you want a cleaner boot)
-    # kernelParams = [ "quiet" "splash" ];
-    # consoleLogLevel = 3;
+    kernelParams = [ "quiet" "splash" ];
+    consoleLogLevel = 3;
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
