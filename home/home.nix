@@ -82,6 +82,8 @@
     nsxiv
     qbittorrent
     valent
+    filen-desktop
+    filen-cli
 
     # ─── Terminal Tools ────────────────────────────────────────────────────────
     tmux
