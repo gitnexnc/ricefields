@@ -47,6 +47,8 @@
           ./hosts/desktop/hardware-configuration.nix
           # Main Configuration 
           ./hosts/desktop/configuration.nix
+	  # Podman Containers
+	  ./hosts/desktop/containers
           # Home Manager Module
           inputs.home-manager.nixosModules.home-manager
         ];
