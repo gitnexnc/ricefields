@@ -1,16 +1,26 @@
+{ config, pkgs, ... }:
+
 {
   cloudflared = {
     image = "cloudflare/cloudflared:latest";
     autoStart = true;
-    cmd = [ 
-      "tunnel" 
-      "--no-autoupdate" 
-      "run" 
-      "--token" 
-      "eyJhIjoiZDBkOTJiOWVmM2NhZDlhZDMyYWE5YTcxNmNiYWJjM2QiLCJ0IjoiNGE2OWIyMjQtY2JlZi00ZjRjLTkxMDMtNzc3YjA3NDdmNTQ3IiwicyI6IlpqUTFZbVkzWkdFdFpUTTJOaTAwWWpneUxXSmlORGN0T0RFeVkySTNOemRoWkRZeiJ9"
+
+    volumes = [
+      "/run/secrets/cloudflared-token:/etc/cloudflared/token:ro"
     ];
+
     extraOptions = [
-      "--network=host"  # Allows access to localhost:9443
+      "--network=host"
+    ];
+
+    cmd = [
+      "tunnel"
+      "--no-autoupdate"
+      "run"
+      "--token-file" "/etc/cloudflared/token"
+      "--icmpv4-src" "0.0.0.0"
+      "--icmpv6-src" "::"
     ];
   };
 }
+
