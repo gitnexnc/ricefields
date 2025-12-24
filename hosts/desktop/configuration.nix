@@ -251,8 +251,8 @@
   # ═══════════════════════════════════════════════════════════════════════════
   # USER CONFIGURATION
   # ═══════════════════════════════════════════════════════════════════════════
- 
 
+  users.mutableUsers = false;
   users.users.nexnc = {
     isNormalUser = true;
     description = "NEXNC";
@@ -394,15 +394,26 @@
   # ═══════════════════════════════════════════════════════════════════════════
 
   sops = {
-    # Path to encrypted secrets file (relative to this configuration.nix file)
-    defaultSopsFile = ../../secrets/user-password.yaml;
-
     # Private age key used to decrypt the file
     age.keyFile = "/var/lib/sops-nix/key.txt";
+    defaultSopsFile = ../../secrets/user-password.yaml;
   };
 
   # Use the decrypted password to set user's password
-  sops.secrets.password.neededForUsers = true;
+  sops.secrets.password = {
+    sopsFile = ../../secrets/user-password.yaml;
+    owner = "root";
+    group = "root";
+    mode = "0400";
+    neededForUsers = true;
+
+  };
+
+  sops.secrets.root_password = {
+    sopsFile = ../../secrets/user-password.yaml;
+    neededForUsers = true;
+
+  };
 
   # Cloudflare token secret
   sops.secrets."cloudflared-token" = {
@@ -412,8 +423,9 @@
     mode = "0444";
   };
 
-  # Assign decrypted password to user
+  # Assign decrypted password to user and root
   users.users.nexnc.hashedPasswordFile = config.sops.secrets.password.path;
+  users.users.root.hashedPasswordFile = config.sops.secrets.root_password.path;
 
 
   # ═══════════════════════════════════════════════════════════════════════════
