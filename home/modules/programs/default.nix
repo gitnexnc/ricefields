@@ -12,6 +12,7 @@
     ./ssh.nix
     ./ncmpcpp.nix
     ./gitui.nix
+    ./direnv.nix
   ];
 }
 
