@@ -87,24 +87,6 @@
     hostName = "nixos";
     networkmanager.enable = true;
 
-   # wg-quick.interfaces = {
-   #   wg0 = {
-   #     address = [ "10.0.0.2/24" ];
-   #     privateKeyFile = "/root/wireguard-keys/private";
-       # generatePrivateKeyFile = true;  # NixOS will generate this for you
-   #   
-   #     peers = [
-   #       {
-   #         publicKey = "lvxDByhRpbSPeePzgdvefVONBI3kvsMThKHDhmyUCyI=";
-   #         allowedIPs = [ "0.0.0.0/0" ];
-   #         endpoint = "146.190.228.197:51820";
-   #         persistentKeepalive = 25;
-	  #  dynamicEndpointRefreshSeconds = 0;
-    #      }
-     #   ];
-      #};
-    #};
-    
     # Firewall configuration
     firewall = {
       enable = true;
@@ -367,11 +349,16 @@
     podman-compose
     slirp4netns
     fuse-overlayfs
+
+   
     
     # ─── System Libraries ─────────────────────────────────────────────────
     libsecret
     sops
     age
+    vulkan-loader
+    vulkan-tools
+    gamemode
   ];
 
   # ═══════════════════════════════════════════════════════════════════════════
