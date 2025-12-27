@@ -67,7 +67,9 @@
     prismlauncher
     gamescope
     winetricks
-    wine
+    wine-wayland
+    wine64
+    steam
     lutris
 
     # ─── Development ───────────────────────────────────────────────────────────
