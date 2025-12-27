@@ -41,6 +41,8 @@
     nixpkgs.config.allowUnfreePredicate = pkg:
       builtins.elem (pkgs.lib.getName pkg) [
         "davinci-resolve"
+	"steam-unwrapped"
+	"steam"
       ];
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -63,7 +65,10 @@
 
     # ─── Gaming ────────────────────────────────────────────────────────────────
     prismlauncher
-    bottles
+    gamescope
+    winetricks
+    wine
+    lutris
 
     # ─── Development ───────────────────────────────────────────────────────────
     python3
