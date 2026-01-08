@@ -77,6 +77,7 @@
     python3
     cargo
     rustc
+    rustup
     nmap
     gcc
     uv
