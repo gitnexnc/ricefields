@@ -136,17 +136,32 @@
         Enable = "Source,Sink,Media,Socket";
       };
     };
+    
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+
+    amdgpu = {
+      initrd.enable = true;
+      opencl.enable = true; # ROCm OpenCL for AMD GPUs
+    };
   };
 
-  hardware.amdgpu = {
-    initrd.enable = true;     # High-res early boot + avoids flicker
-    opencl.enable = true;     # ROCm OpenCL for AMD GPUs
+   
+  # ═══════════════════════════════════════════════════════════════════════════
+  # MEMORY MANAGEMENT
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 12;  # ~3GB ZRAM
   };
 
-  hardware.graphics = {
-  enable = true;
-  enable32Bit = true;
-  };
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 10;
+  };  
 
   # ═══════════════════════════════════════════════════════════════════════════
   # AUDIO (PIPEWIRE)
