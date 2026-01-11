@@ -63,6 +63,7 @@
     gimp
     davinci-resolve
     kicad
+    godot
 
     # ─── Gaming ────────────────────────────────────────────────────────────────
     prismlauncher
