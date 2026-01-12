@@ -43,8 +43,7 @@
   nix = {
 
     registry = {
-      # This creates your 'univ' macro
-      univ.to = {
+      project.to = {
         type = "path";
         path = "/etc/nixos/templates";
       };
