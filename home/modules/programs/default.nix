@@ -13,6 +13,7 @@
     ./ncmpcpp.nix
     ./gitui.nix
     ./direnv.nix
+    ./tmux.nix
   ];
 }
 
