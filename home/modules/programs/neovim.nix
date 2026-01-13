@@ -146,7 +146,20 @@
         { "gd", vim.lsp.buf.definition, desc = "Go to Definition" },
         { "K", vim.lsp.buf.hover, desc = "Hover Docs" },
       })
+      -- Black hole register for delete operations (don't overwrite clipboard)
+      vim.keymap.set({"n", "v"}, "d", [["_d]], { desc = "Delete (black hole)" })
+      vim.keymap.set({"n", "v"}, "D", [["_D]], { desc = "Delete to EOL (black hole)" })
+      vim.keymap.set("n", "c", [["_c]])
+      vim.keymap.set("n", "C", [["_C]])
+      vim.keymap.set("n", "x", [["_x]])
+      vim.keymap.set("n", "X", [["_X]])
 
+      -- Visual mode paste doesn't overwrite clipboard
+      vim.keymap.set("x", "p", [["_dP]])
+
+      -- Use leader+d for "cut" (actual delete that goes to clipboard)
+      vim.keymap.set({"n", "v"}, "<leader>x", [["+d]], { desc = "Cut to clipboard" })
+      
       require("catppuccin").setup({ flavour = "mocha" })
       vim.cmd.colorscheme "catppuccin"
       require('lualine').setup()
@@ -158,7 +171,5 @@
     pyright
     black
     nodePackages.prettier
-    ripgrep
-    fd
   ];
 }
