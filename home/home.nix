@@ -93,6 +93,9 @@
     filen-desktop
     filen-cli
     wireguard-tools
+    glow 	    # Markdown Reader in Terminal
+    figlet
+    lolcat
 
     # ─── Terminal Tools ────────────────────────────────────────────────────────
     wl-clipboard
