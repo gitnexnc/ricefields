@@ -210,10 +210,20 @@
   # XDG Portals for Wayland
   xdg.portal = {
     enable = true;
+
     extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
     ];
+
+    config = {
+      common = {
+        default = [ "gtk" ];
+      };
+    hyprland = {
+      default = [ "hyprland" "gtk" ];
+      };
+    };
   };
 
   # Input & Console
