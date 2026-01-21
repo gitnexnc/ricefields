@@ -72,6 +72,8 @@
     wine-wayland
     wine64
     steam
+    peacock
+    lutris
 
     # ─── Development ───────────────────────────────────────────────────────────
     python3
