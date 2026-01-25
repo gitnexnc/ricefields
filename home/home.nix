@@ -68,10 +68,12 @@
     # ─── Gaming ────────────────────────────────────────────────────────────────
     prismlauncher
     gamescope
+    protontricks
     winetricks
     wine-wayland
     wine64
     steam
+    steam-run-free
     peacock
     lutris
 
@@ -141,6 +143,12 @@
     MOZ_ENABLE_WAYLAND  = "1";
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_TYPE    = "wayland";
+
+    # Game Driver Fixes
+    # Forces correct 32-bit/64-bit drivers and enables background shader compilation
+    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json:/run/opengl-driver-32/share/vulkan/icd.d/radeon_icd.i686.json";
+    DXVK_ASYNC = "1";
+    RADV_PERFTEST = "gpl"; # Performance fix for movement jitters
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
