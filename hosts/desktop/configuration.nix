@@ -35,6 +35,16 @@
     # Silent boot (optional - uncomment if you want a cleaner boot)
     kernelParams = [ "quiet" "splash" ];
     consoleLogLevel = 3;
+
+    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    
+    # Loads the module at boot
+    kernelModules = [ "v4l2loopback" ];
+    
+    # Configures the virtual device so browsers (LibreWolf) recognize it easily
+    extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=1 card_label="PhoneWebcam" exclusive_caps=1
+    '';
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
