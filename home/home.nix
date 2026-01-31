@@ -64,6 +64,8 @@
     davinci-resolve
     kicad
     godot
+    droidcam
+
 
     # ─── Gaming ────────────────────────────────────────────────────────────────
     prismlauncher
@@ -100,6 +102,7 @@
     figlet
     lolcat
     universal-android-debloater
+    android-tools
 
     # ─── Terminal Tools ────────────────────────────────────────────────────────
     wl-clipboard
