@@ -14,6 +14,7 @@
     ./gitui.nix
     ./direnv.nix
     ./tmux.nix
+    ./gpg.nix
   ];
 }
 
