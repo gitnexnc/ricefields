@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   programs.niri.settings = {
+    hotkey-overlay.skip-at-startup = true;
     outputs."DP-1" = {
       mode = {
         width = 1920;
@@ -33,6 +34,7 @@
 
     spawn-at-startup = [
       { command = [ "${pkgs.swww}/bin/swww-daemon" ]; }
+      { command = [ "${pkgs.swww}/bin/swww" "img" "/home/nexnc/Pictures/Wallpapers/wallpaper.jpg" ]; }
       { command = [ "swaync" ]; }
       { command = [ "udiskie" "-t" ]; }
       { command = [ "wl-paste" "--watch" "cliphist" "store" ]; }
