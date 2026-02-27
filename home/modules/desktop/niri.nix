@@ -31,16 +31,11 @@
     # Auto-save screenshots here
     screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
 
-    # Permanent named workspaces 1 through 9
-    workspaces = {
-      "1" = {}; "2" = {}; "3" = {}; "4" = {}; "5" = {};
-      "6" = {}; "7" = {}; "8" = {}; "9" = {};
-    };
-
     spawn-at-startup = [
       { command = [ "${pkgs.swww}/bin/swww-daemon" ]; }
       { command = [ "swaync" ]; }
       { command = [ "udiskie" "-t" ]; }
+      { command = [ "wl-paste" "--watch" "cliphist" "store" ]; }
     ];
 
     binds = {
@@ -51,6 +46,7 @@
       "Mod+E".action.spawn = ["foot" "-e" "yazi"];
       "Mod+L".action.spawn = "hyprlock";
       "Mod+Shift+W".action.spawn = "wlogout";
+      "Mod+W".action.spawn = ["bash" "-c" "cliphist list | wofi --dmenu | cliphist decode | wl-copy"];
 
       # ── Windows ───────────────────────────────────────────────
       "Mod+C".action.close-window = {};
@@ -79,24 +75,24 @@
       "Mod+Shift+Equal".action.set-window-height = "+10%";
 
       # ── Workspaces ────────────────────────────────────────────
-      "Mod+1".action.focus-workspace = "1";
-      "Mod+2".action.focus-workspace = "2";
-      "Mod+3".action.focus-workspace = "3";
-      "Mod+4".action.focus-workspace = "4";
-      "Mod+5".action.focus-workspace = "5";
-      "Mod+6".action.focus-workspace = "6";
-      "Mod+7".action.focus-workspace = "7";
-      "Mod+8".action.focus-workspace = "8";
-      "Mod+9".action.focus-workspace = "9";
-      "Mod+Shift+1".action.move-column-to-workspace = "1";
-      "Mod+Shift+2".action.move-column-to-workspace = "2";
-      "Mod+Shift+3".action.move-column-to-workspace = "3";
-      "Mod+Shift+4".action.move-column-to-workspace = "4";
-      "Mod+Shift+5".action.move-column-to-workspace = "5";
-      "Mod+Shift+6".action.move-column-to-workspace = "6";
-      "Mod+Shift+7".action.move-column-to-workspace = "7";
-      "Mod+Shift+8".action.move-column-to-workspace = "8";
-      "Mod+Shift+9".action.move-column-to-workspace = "9";
+      "Mod+1".action.focus-workspace = 1;
+      "Mod+2".action.focus-workspace = 2;
+      "Mod+3".action.focus-workspace = 3;
+      "Mod+4".action.focus-workspace = 4;
+      "Mod+5".action.focus-workspace = 5;
+      "Mod+6".action.focus-workspace = 6;
+      "Mod+7".action.focus-workspace = 7;
+      "Mod+8".action.focus-workspace = 8;
+      "Mod+9".action.focus-workspace = 9;
+      "Mod+Shift+1".action.move-column-to-workspace = 1;
+      "Mod+Shift+2".action.move-column-to-workspace = 2;
+      "Mod+Shift+3".action.move-column-to-workspace = 3;
+      "Mod+Shift+4".action.move-column-to-workspace = 4;
+      "Mod+Shift+5".action.move-column-to-workspace = 5;
+      "Mod+Shift+6".action.move-column-to-workspace = 6;
+      "Mod+Shift+7".action.move-column-to-workspace = 7;
+      "Mod+Shift+8".action.move-column-to-workspace = 8;
+      "Mod+Shift+9".action.move-column-to-workspace = 9;
       "Mod+Tab".action.focus-workspace-previous = {};
       "Mod+Page_Up".action.focus-workspace-up = {};
       "Mod+Page_Down".action.focus-workspace-down = {};
@@ -122,4 +118,19 @@
 
     window-rules = [
       {
-        # Global Rule: Curved corners and
+        # Global Rule: Curved corners and max width for new windows
+        geometry-corner-radius = {
+          top-left = 8.0;
+          top-right = 8.0;
+          bottom-left = 8.0;
+          bottom-right = 8.0;
+        };
+        clip-to-geometry = true;
+        open-maximized = true;
+      }
+      {
+        matches = [{ is-floating = true; }];
+      }
+    ];
+  };
+}
