@@ -78,10 +78,12 @@
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
+	"https://niri.cachix.org"    
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+	"niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       ];
     };
     
@@ -98,10 +100,10 @@
       dates = [ "weekly" ];
     };
   };
-  
+ 
   nixpkgs.config.allowUnfree = true;
 
-   # ═══════════════════════════════════════════════════════════════════════════
+  # ═══════════════════════════════════════════════════════════════════════════
   # NETWORKING & LOCALIZATION
   # ═══════════════════════════════════════════════════════════════════════════
   networking = {
@@ -200,19 +202,20 @@
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # DESKTOP ENVIRONMENT (HYPRLAND)
+  # DESKTOP ENVIRONMENT
   # ═══════════════════════════════════════════════════════════════════════════
-  programs.hyprland = {
+
+  # Niri
+  programs.niri = {
     enable = true;
-    withUWSM = true;
-    xwayland.enable = true;
+    package = pkgs.niri;
   };
 
   # Display Manager (greetd + tuigreet)
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd Hyprland";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks"; 
       user = "greeter";
     };
   };
@@ -222,17 +225,12 @@
     enable = true;
 
     extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
     ];
 
     config = {
-      common = {
-        default = [ "gtk" ];
-      };
-    hyprland = {
-      default = [ "hyprland" "gtk" ];
-      };
+      common.default = [ "gtk" ];
+      niri.default = [ "gtk" ];
     };
   };
 
@@ -373,11 +371,9 @@
     udiskie
     
     # ─── Hyprland Ecosystem ────────────────────────────────────────────────
-    hyprpolkitagent
-    wl-clipboard       # Wayland clipboard utilities
+    kdePackages.polkit-kde-agent-1
     
     # ─── Audio & Hardware ──────────────────────────────────────────────────
-    pavucontrol
     ddcutil
     
     # ─── Containers & VM ───────────────────────────────────────────────────
@@ -397,6 +393,7 @@
     vulkan-loader
     amdgpu_top
     mangohud
+    xwayland-satellite
   ];
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -491,18 +488,4 @@
   
   system.stateVersion = "24.11";  # Did you read the comment?
 }
-
-# ═══════════════════════════════════════════════════════════════════════════
-# NOTES & TODO
-# ═══════════════════════════════════════════════════════════════════════════
-# 
-# Next improvements to consider:
-# - [ ] Enable auto-upgrade: system.autoUpgrade.enable = true;
-# - [ ] Set up automated backups with restic or borg
-# - [ ] Configure firewall rules for specific services
-# - [ ] Add custom kernel parameters if needed
-# - [ ] Set up ZFS or BTRFS snapshots if using those filesystems
-# 
-# ═══════════════════════════════════════════════════════════════════════════
-
 
