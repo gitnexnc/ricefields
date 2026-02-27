@@ -103,6 +103,7 @@
     lolcat
     universal-android-debloater
     android-tools
+    pavucontrol
 
     # ─── Terminal Tools ────────────────────────────────────────────────────────
     wl-clipboard
@@ -144,7 +145,7 @@
 
     # Wayland Compatibility
     MOZ_ENABLE_WAYLAND  = "1";
-    XDG_CURRENT_DESKTOP = "Hyprland";
+    XDG_CURRENT_DESKTOP = "niri";
     XDG_SESSION_TYPE    = "wayland";
 
     # Game Driver Fixes
