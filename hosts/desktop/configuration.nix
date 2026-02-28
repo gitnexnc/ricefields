@@ -348,14 +348,6 @@
     flatpak.enable = true;
   };
   
-  programs.thunar = {
-    enable = true;
-    plugins = with pkgs.xfce; [
-      thunar-archive-plugin
-      thunar-volman
-    ];
-  };
-
   programs.fish.enable = true;
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -366,6 +358,7 @@
     busybox
     wget
     curl
+    nautilus
     
     # ─── Filesystem & Disks ────────────────────────────────────────────────
     gparted
