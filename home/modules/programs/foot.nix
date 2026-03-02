@@ -21,7 +21,6 @@ programs.foot = {
     };
     
     # Import Catppuccin Mocha theme
-    # You'll need to add the colors manually or use a foot theme
     colors = {
       # Catppuccin Mocha colors
       alpha = "1.0";
