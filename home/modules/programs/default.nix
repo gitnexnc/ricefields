@@ -10,7 +10,7 @@
     ./foot.nix
     ./starship.nix
     ./ssh.nix
-    ./ncmpcpp.nix
+    ./rmpc.nix
     ./gitui.nix
     ./direnv.nix
     ./tmux.nix
