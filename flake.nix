@@ -47,11 +47,11 @@
     # ═══════════════════════════════════════════════════════════════════════════
     nixosConfigurations = {
 
-      "workstation" = nixpkgs.lib.nixosSystem {
+      "kerr" = nixpkgs.lib.nixosSystem {
     	system = "x86_64-linux";
     	specialArgs = { inherit inputs; };
    	modules = [
-      	  ./hosts/workstation/default.nix
+      	  ./hosts/kerr/default.nix
       	  inputs.home-manager.nixosModules.home-manager
       	  inputs.sops-nix.nixosModules.sops
       	  inputs.niri.nixosModules.niri
