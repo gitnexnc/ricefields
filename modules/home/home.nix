@@ -25,14 +25,14 @@
   #  MODULE IMPORTS
   # ═══════════════════════════════════════════════════════════════════════════
   imports = [
-    # Desktop Environment Settings (Hyprland, Waybar, etc.)
-    ./modules/desktop
+    # Desktop Environment
+    ./desktop
 
-    # User Programs (Git, Neovim, etc.)
-    ./modules/programs
+    # User Programs
+    ./programs
  
-    # User Services (Syncthing, MPD, etc.)
-    ./modules/services
+    # User Services
+    ./services
   ];
 
   # ═══════════════════════════════════════════════════════════════════════════

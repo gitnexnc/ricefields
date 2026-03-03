@@ -30,38 +30,17 @@
       efi.canTouchEfiVariables = true;
       timeout = 3;  # Boot menu timeout in seconds
     };
-    kernelPackages = pkgs.linuxPackages_zen; # Performance-optimized kernel
+    kernelPackages = pkgs.linuxPackages_zen;  # Performance-optimized kernel
     
     # Silent boot (optional - uncomment if you want a cleaner boot)
-    kernelParams = [ "quiet" "splash" ];
-    consoleLogLevel = 3;
-
-    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-    
-    # Loads the module at boot
-    kernelModules = [ "v4l2loopback" ];
-    
-    # Configures the virtual device so browsers (LibreWolf) recognize it easily
-    extraModprobeConfig = ''
-      options v4l2loopback devices=1 video_nr=1 card_label="PhoneWebcam" exclusive_caps=1
-    '';
+    # kernelParams = [ "quiet" "splash" ];
+    # consoleLogLevel = 3;
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
   # NIX CONFIGURATION
   # ═══════════════════════════════════════════════════════════════════════════
   nix = {
-
-    registry = {
-      project.to = {
-        type = "path";
-        path = "/etc/nixos/templates";
-      };
-
-      # This pins 'nixpkgs' to your system version and fixes the error
-      nixpkgs.flake = inputs.nixpkgs;
-    };
-
     settings = {
       # Flakes & nix-command
       experimental-features = [ "nix-command" "flakes" ];
@@ -78,12 +57,10 @@
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
-	"https://niri.cachix.org"    
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-	"niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       ];
     };
     
@@ -100,7 +77,7 @@
       dates = [ "weekly" ];
     };
   };
- 
+  
   nixpkgs.config.allowUnfree = true;
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -109,15 +86,11 @@
   networking = {
     hostName = "nixos";
     networkmanager.enable = true;
-
+    
     # Firewall configuration
     firewall = {
       enable = true;
       trustedInterfaces = ["virbr0"];
-
-      allowedTCPPorts = [ 56000 25565 ]; 
-      allowedUDPPorts = [ 56000 19132 ];
-
       allowedTCPPortRanges = [ 
         { from = 1714; to = 1764; }  # KDE Connect / Valent
       ];
@@ -149,7 +122,9 @@
   # HARDWARE CONFIGURATION
   # ═══════════════════════════════════════════════════════════════════════════
   hardware = {
+    graphics.enable = true;
     i2c.enable = true;
+    
     # Bluetooth
     bluetooth = {
       enable = true;
@@ -159,32 +134,7 @@
         Enable = "Source,Sink,Media,Socket";
       };
     };
-    
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-
-    amdgpu = {
-      initrd.enable = true;
-      opencl.enable = true; # ROCm OpenCL for AMD GPUs
-    };
   };
-
-   
-  # ═══════════════════════════════════════════════════════════════════════════
-  # MEMORY MANAGEMENT
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  zramSwap = {
-    enable = true;
-    algorithm = "zstd";
-    memoryPercent = 12;  # ~3GB ZRAM
-  };
-
-  boot.kernel.sysctl = {
-    "vm.swappiness" = 10;
-  };  
 
   # ═══════════════════════════════════════════════════════════════════════════
   # AUDIO (PIPEWIRE)
@@ -199,23 +149,32 @@
     };
     pulse.enable = true;
     wireplumber.enable = true;
+    
+    # Low latency configuration (optional)
+    # extraConfig.pipewire."92-low-latency" = {
+    #   "context.properties" = {
+    #     "default.clock.rate" = 48000;
+    #     "default.clock.quantum" = 32;
+    #     "default.clock.min-quantum" = 32;
+    #     "default.clock.max-quantum" = 32;
+    #   };
+    # };
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # DESKTOP ENVIRONMENT
+  # DESKTOP ENVIRONMENT (HYPRLAND)
   # ═══════════════════════════════════════════════════════════════════════════
-
-  # Niri
-  programs.niri = {
+  programs.hyprland = {
     enable = true;
-    package = pkgs.niri;
+    withUWSM = true;
+    xwayland.enable = true;
   };
 
   # Display Manager (greetd + tuigreet)
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd niri"; 
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd Hyprland";
       user = "greeter";
     };
   };
@@ -223,16 +182,10 @@
   # XDG Portals for Wayland
   xdg.portal = {
     enable = true;
-
     extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome
     ];
-
-    config = {
-      common.default = [ "gnome ""gtk" ];
-      niri.default = [ "gnome" "gtk" ];
-    };
   };
 
   # Input & Console
@@ -257,18 +210,11 @@
   
   programs.gnome-disks.enable = true;
 
-  # Custom auto-mount point
-  fileSystems."/mnt/Data" = {
-    device = "UUID=d60c75ae-fc6a-4491-b591-91397bd46aaf";
-    fsType = "ext4";
-    options = [ "nofail" ];
-  };
-
   # ═══════════════════════════════════════════════════════════════════════════
   # USER CONFIGURATION
   # ═══════════════════════════════════════════════════════════════════════════
+ 
 
-  users.mutableUsers = false;
   users.users.nexnc = {
     isNormalUser = true;
     description = "NEXNC";
@@ -278,8 +224,7 @@
       "i2c" 
       "libvirtd"
       "video"      # For brightness control
-      "audio" 
-      "render" # For audio devices
+      "audio"      # For audio devices
     ];
     shell = pkgs.fish;
   };
@@ -308,7 +253,6 @@
       enable = true;
       dockerCompat = true;  # Docker compatibility
       defaultNetwork.settings.dns_enabled = true;
-
     };
     
     # QEMU/KVM with libvirt
@@ -348,6 +292,14 @@
     flatpak.enable = true;
   };
   
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-archive-plugin
+      thunar-volman
+    ];
+  };
+
   programs.fish.enable = true;
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -358,16 +310,17 @@
     busybox
     wget
     curl
-    nautilus
     
     # ─── Filesystem & Disks ────────────────────────────────────────────────
     gparted
     udiskie
     
     # ─── Hyprland Ecosystem ────────────────────────────────────────────────
-    kdePackages.polkit-kde-agent-1
+    hyprpolkitagent
+    wl-clipboard       # Wayland clipboard utilities
     
     # ─── Audio & Hardware ──────────────────────────────────────────────────
+    pavucontrol
     ddcutil
     
     # ─── Containers & VM ───────────────────────────────────────────────────
@@ -375,19 +328,8 @@
     podman-compose
     slirp4netns
     fuse-overlayfs
-
-   
     
-    # ─── System Libraries ─────────────────────────────────────────────────
-    libsecret
-    sops
-    age
-    gamemode
-    vulkan-tools
-    vulkan-loader
-    amdgpu_top
-    mangohud
-    xwayland-satellite
+    # ─── System Info & Fun ─────────────────────────────────────────────────
   ];
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -399,52 +341,6 @@
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # KEYRINGS AND SECRETS MANAGEMENT
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.greetd.enableGnomeKeyring = true;
-
-  # ═══════════════════════════════════════════════════════════════════════════
-  # SOPS-NIX CONFIGURATION
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  sops = {
-    # Private age key used to decrypt the file
-    age.keyFile = "/var/lib/sops-nix/key.txt";
-    defaultSopsFile = ../../secrets/user-password.yaml;
-  };
-
-  # Use the decrypted password to set user's password
-  sops.secrets.password = {
-    sopsFile = ../../secrets/user-password.yaml;
-    owner = "root";
-    group = "root";
-    mode = "0400";
-    neededForUsers = true;
-
-  };
-
-  sops.secrets.root_password = {
-    sopsFile = ../../secrets/user-password.yaml;
-    neededForUsers = true;
-
-  };
-
-  # Cloudflare token secret
-  sops.secrets."cloudflared-token" = {
-    sopsFile = ../../secrets/cloudflared.yaml;
-    owner = "root";
-    group = "root";
-    mode = "0444";
-  };
-
-  # Assign decrypted password to user and root
-  users.users.nexnc.hashedPasswordFile = config.sops.secrets.password.path;
-  users.users.root.hashedPasswordFile = config.sops.secrets.root_password.path;
-
-
-  # ═══════════════════════════════════════════════════════════════════════════
   # SYSTEM UPDATE
   # ═══════════════════════════════════════════════════════════════════════════
 
@@ -452,23 +348,6 @@
     enable = false;
     allowReboot = false;
   };
-
-
-
-  # ═══════════════════════════════════════════════════════════════════════════
-  # ENVIRONMENT SESSION VARIABLES
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  environment.sessionVariables = {
-    GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/glib-2.0/schemas";
-    
-    # Force Vulkan to use the AMD RADV driver and ignore llvmpipe (CPU)
-    AMD_VULKAN_ICD = "RADV";
-    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-  };
-
-  environment.profileRelativeEnvVars.XDG_DATA_DIRS = [ "share" ];
-
 
   # ═══════════════════════════════════════════════════════════════════════════
   # SYSTEM STATE VERSION
@@ -482,4 +361,17 @@
   
   system.stateVersion = "24.11";  # Did you read the comment?
 }
+
+# ═══════════════════════════════════════════════════════════════════════════
+# NOTES & TODO
+# ═══════════════════════════════════════════════════════════════════════════
+# 
+# Next improvements to consider:
+# - [ ] Enable auto-upgrade: system.autoUpgrade.enable = true;
+# - [ ] Set up automated backups with restic or borg
+# - [ ] Configure firewall rules for specific services
+# - [ ] Add custom kernel parameters if needed
+# - [ ] Set up ZFS or BTRFS snapshots if using those filesystems
+# 
+# ═══════════════════════════════════════════════════════════════════════════
 

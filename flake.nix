@@ -46,43 +46,27 @@
     #  SYSTEM CONFIGURATION
     # ═══════════════════════════════════════════════════════════════════════════
     nixosConfigurations = {
-      
-      # Desktop Configuration
-      "desktop" = nixpkgs.lib.nixosSystem {
-	# Target System Architecture
-	system = "x86_64-linux";
-	# Pass inputs to modules
-	specialArgs = { inherit inputs; };
-	modules = [
-          # Hardware Import
-          ./hosts/desktop/hardware-configuration.nix
-          # Main Configuration 
-          ./hosts/desktop/configuration.nix
-	  # Podman Containers
-	  ./hosts/desktop/containers
-          # Home Manager Module
-          inputs.home-manager.nixosModules.home-manager
-	  # Sops-nix Module
-	  inputs.sops-nix.nixosModules.sops
-	  # Niri Module
-	  inputs.niri.nixosModules.niri
-        ];
-      };
 
-      # VM Configuration
-      "vm" = nixpkgs.lib.nixosSystem {
-	# Target System Architecture
-	system = "x86_64-linux";
-	specialArgs = {inherit inputs;};
-	modules = [
-	  # Main Configuration
-	  ./hosts/vm/configuration.nix
-	  # Home Manager Module
-	  inputs.home-manager.nixosModules.home-manager
-	  # Sops-nix module
-	  inputs.sops-nix.nixosModules.sops
-	];
-      };
+      "workstation" = nixpkgs.lib.nixosSystem {
+    	system = "x86_64-linux";
+    	specialArgs = { inherit inputs; };
+   	modules = [
+      	  ./hosts/workstation/default.nix
+      	  inputs.home-manager.nixosModules.home-manager
+      	  inputs.sops-nix.nixosModules.sops
+      	  inputs.niri.nixosModules.niri
+    	];
+     };
+
+     "vm" = nixpkgs.lib.nixosSystem {
+       system = "x86_64-linux";
+       specialArgs = { inherit inputs; };
+       modules = [
+        ./hosts/vm/default.nix
+        inputs.home-manager.nixosModules.home-manager
+        inputs.sops-nix.nixosModules.sops
+      ];
+    };  
    };
 
     # ═══════════════════════════════════════════════════════════════════════════
