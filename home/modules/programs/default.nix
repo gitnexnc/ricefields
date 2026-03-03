@@ -13,8 +13,8 @@
     ./rmpc.nix
     ./gitui.nix
     ./direnv.nix
-    ./tmux.nix
     ./gpg.nix
+    ./zellij.nix
   ];
 }
 
