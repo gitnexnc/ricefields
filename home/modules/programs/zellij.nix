@@ -3,7 +3,7 @@
 {
   programs.zellij = {
     enable = true;
-    enableFishIntegration = true;
+    enableFishIntegration = false;
 
     settings = {
       theme = "catppuccin-mocha";
