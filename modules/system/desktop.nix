@@ -4,25 +4,32 @@
     enable = true;
     package = pkgs.niri;
   };
-
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd niri";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd niri-session";
       user = "greeter";
     };
   };
 
+  services.dbus.packages = [ pkgs.nautilus ];
+
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gnome  # screencasting
       xdg-desktop-portal-gtk
+      gnome-keyring
     ];
-    config.niri = {
-      default = [ "hyprland" "gtk" ];
-      "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
-      "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+    config = {
+      common.default = [ "gtk" ];
+      niri = {
+        default = [ "gnome" "gtk" ];
+        "org.freedesktop.impl.portal.Access" = [ "gtk" ];
+        "org.freedesktop.impl.portal.Notification" = [ "gtk" ];
+        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+        "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+      };
     };
   };
 
@@ -31,16 +38,13 @@
     variant = "";
   };
   console.keyMap = "us";
-
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     font-awesome
     noto-fonts
     noto-fonts-color-emoji
   ];
-
   programs.gnome-disks.enable = true;
-
   services = {
     gvfs.enable    = true;
     udisks2.enable = true;
@@ -50,18 +54,15 @@
     flatpak.enable = true;
     gnome.gnome-keyring.enable = true;
   };
-
   security = {
     polkit.enable = true;
     sudo.wheelNeedsPassword = true;
     pam.services.greetd.enableGnomeKeyring = true;
   };
-
   environment.profileRelativeEnvVars.XDG_DATA_DIRS = [ "share" ];
   environment.sessionVariables = {
     GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/glib-2.0/schemas";
   };
-
   environment.systemPackages = with pkgs; [
     busybox
     wget
@@ -84,10 +85,9 @@
     amdgpu_top
     mangohud
     xwayland-satellite
+    slurp                     # Required by xdg-desktop-portal-wlr for region selection
   ];
-
   programs.fish.enable = true;
-
   services.openssh = {
     enable = true;
     settings = {
@@ -95,7 +95,6 @@
       PermitRootLogin = "no";
     };
   };
-
   system.autoUpgrade = {
     enable = false;
     allowReboot = false;
