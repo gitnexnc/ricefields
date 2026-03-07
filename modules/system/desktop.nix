@@ -18,11 +18,11 @@
     extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome
     ];
-    config = {
-      common.default = [ "gnome" "gtk" ];
-      niri.default = [ "gnome" "gtk" ];
+    config.niri = {
+      default = [ "hyprland" "gtk" ];
+      "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
+      "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
     };
   };
 
