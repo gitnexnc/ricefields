@@ -3,25 +3,23 @@
 {
   home.packages = with pkgs; [
     jujutsu
-    lazyjj
+    lazyjj # The TUI you want to use
   ];
 
   programs.jujutsu = {
     enable = true;
+    # jj config documentation: https://jj-vcs.github.io/jj/latest/config/
     settings = {
       user = {
         name = "nexnc";
         email = "git@nexnc.com";
       };
       ui = {
+        default-command = "log";
+        # Modern jj uses diff-formatter instead of diff.format
+        diff-formatter = ":color-words"; 
         editor = "nvim";
-        # Setting pager to "less -FRX" or an empty string "" 
-        # ensures jj uses its own internal color/diff engine 
-        # instead of passing it to Delta.
-        pager = "less -FRX"; 
-        
-        diff.format = "color-words"; 
-        
+        pager = "less -FRX";
         signing-key = "0xDC9F9D4EAA4F9406";
       };
       git = {
@@ -29,4 +27,16 @@
       };
     };
   };
+
+  # Configuration for lazyjj
+  # Documentation: https://github.com/pedro-beirao/lazyjj
+  home.file.".config/lazyjj/config.toml".text = ''
+    [theme]
+    # Match your terminal's aesthetic
+    highlight_color = "cyan"
+
+    [keybindings]
+    # lazyjj defaults are usually fine, but you can override them here
+    # Example: quit = "q"
+  '';
 }
