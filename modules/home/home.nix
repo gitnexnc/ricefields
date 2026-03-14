@@ -55,7 +55,6 @@
     signal-desktop
 
     # ─── Media & Entertainment ─────────────────────────────────────────────────
-    mpv
 
     # ─── Productivity & Creation ───────────────────────────────────────────────
     obs-studio
