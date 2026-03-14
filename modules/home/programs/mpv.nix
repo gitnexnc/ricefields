@@ -1,17 +1,12 @@
 { pkgs, ... }:
 
 {
-  # Install ytfzf separately for browsing your subscriptions
-  home.packages = [ pkgs.ytfzf ];
-
   programs.mpv = {
     enable = true;
     scripts = with pkgs.mpvScripts; [
       uosc
       thumbfast
       sponsorblock
-      return-youtube-dislike
-      quality-menu
       mpris
     ];
 
@@ -19,17 +14,17 @@
       osc = "no";
       osd-bar = "no";
       border = "no";
-      
-      # Sponsorblock settings: skip sponsors automatically
-      # options: skip, notify, or manual
-      sponsorblock-report = "yes";
+      hwdec = "auto-safe";
+      ytdl-format = "bestvideo[height<=?1080]+bestaudio/best";
     };
 
     bindings = {
       "m" = "script-binding uosc/menu";
       "q" = "script-binding uosc/stream-quality";
-      # Press 'D' to see the video statistics, including Dislikes
-      "D" = "script-binding uosc/keybinds"; 
     };
   };
+
+  home.packages = with pkgs; [
+    ytfzf
+  ];
 }
